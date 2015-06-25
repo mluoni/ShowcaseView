@@ -20,8 +20,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 class StandardShowcaseDrawer implements ShowcaseDrawer {
@@ -31,6 +33,10 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
     private final Paint basicPaint;
     private final float showcaseRadius;
     protected int backgroundColour;
+    protected Drawable imageDrawable; //BitmapDrawable
+    protected Rect imagePosition = null;
+    //protected Point textPosition = null;
+
 
     public StandardShowcaseDrawer(Resources resources) {
         PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
@@ -42,7 +48,15 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
         basicPaint = new Paint();
         showcaseRadius = resources.getDimension(R.dimen.showcase_radius);
         showcaseDrawable = resources.getDrawable(R.drawable.cling_bleached);
+        imageDrawable = null;
     }
+
+    @Override
+    public void setImage(Drawable image, Rect rect) {
+        this.imageDrawable = image;
+        this.imagePosition = rect;
+    }
+
 
     @Override
     public void setShowcaseColour(int color) {
@@ -61,9 +75,23 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
                 left + getShowcaseWidth(),
                 top + getShowcaseHeight());
         showcaseDrawable.draw(bufferCanvas);
+     //   this.drawImage(buffer, left, top, bufferCanvas);
+
     }
 
     @Override
+    public void drawImage(Bitmap buffer ) {
+
+        if(this.imageDrawable !=null){
+            Canvas bufferCanvas = new Canvas(buffer);
+            imageDrawable.setBounds(this.imagePosition);
+            imageDrawable.draw(bufferCanvas);
+        }
+    }
+
+
+
+        @Override
     public int getShowcaseWidth() {
         return showcaseDrawable.getIntrinsicWidth();
     }

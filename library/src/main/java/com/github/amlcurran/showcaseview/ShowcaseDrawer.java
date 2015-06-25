@@ -18,6 +18,8 @@ package com.github.amlcurran.showcaseview;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 
 /**
  * Created by curraa01 on 13/10/2013.
@@ -27,6 +29,7 @@ interface ShowcaseDrawer {
     void setShowcaseColour(int color);
 
     void drawShowcase(Bitmap buffer, float x, float y, float scaleMultiplier);
+    void drawImage(Bitmap buffer);
 
     int getShowcaseWidth();
 
@@ -39,4 +42,8 @@ interface ShowcaseDrawer {
     void erase(Bitmap bitmapBuffer);
 
     void drawToCanvas(Canvas canvas, Bitmap bitmapBuffer);
+
+    void setImage(Drawable image, Rect rect);
+
+   // void  setTextPosition(int x, int y) ;
 }

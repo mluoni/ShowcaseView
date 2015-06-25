@@ -17,7 +17,11 @@
 package com.github.amlcurran.showcaseview.sample.animations;
 
 import android.app.Activity;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,13 +52,51 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
 
+        Drawable d =  getResources().getDrawable(R.drawable.diego5);
+        Rect r = getRect(d);
+
         showcaseView = new ShowcaseView.Builder(this)
                 .setTarget(new ViewTarget(findViewById(R.id.textView)))
                 .setOnClickListener(this)
+                .setImage(d, r)
                 .build();
         showcaseView.setButtonText(getString(R.string.next));
     }
 
+
+    protected Rect getRect(Drawable d){
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        android.graphics.Rect r =new Rect();
+        int right  = (int) (width - width*0.3);
+        int bottom =  (int) (height - height*0.3);
+        int left =  (int) (width*0.3);
+        int  top =  (int) (height*0.3);
+        r.set(left, top, right, bottom);
+        return r;
+    }
+
+    protected Rect getRectTop(){
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        android.graphics.Rect r =new Rect();
+        int right  = (int) (width - width*0.1);
+        int bottom =  (int) (height - height*0.8);
+        int left =  (int) (width*0.1);
+        int  top =  (int) (height*0.1);
+        r.set(left, top, right, bottom);
+        return r;
+    }
 
     private void setAlpha(float alpha, View... views) {
         if (apiUtils.isCompatWithHoneycomb()) {
@@ -68,11 +110,17 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (counter) {
             case 0:
+                Drawable d =  getResources().getDrawable(R.drawable.maradona_4);
+                Rect r = getRectTop();
                 showcaseView.setShowcase(new ViewTarget(textView2), true);
+                showcaseView.setImage(d, r);
                 break;
 
             case 1:
+                 d =  getResources().getDrawable(R.drawable.diego1);
+                 r = getRect(d);
                 showcaseView.setShowcase(new ViewTarget(textView3), true);
+                showcaseView.setImage(d, r);
                 break;
 
             case 2:
@@ -80,6 +128,7 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
                 showcaseView.setContentTitle("Check it out");
                 showcaseView.setContentText("You don't always need a target to showcase");
                 showcaseView.setButtonText(getString(R.string.close));
+
                 setAlpha(0.4f, textView1, textView2, textView3);
                 break;
 

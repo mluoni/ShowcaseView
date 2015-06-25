@@ -19,6 +19,7 @@ package com.github.amlcurran.showcaseview;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.text.DynamicLayout;
 import android.text.Layout;
@@ -46,6 +47,7 @@ class TextDrawer {
     private TextAppearanceSpan mTitleSpan;
     private TextAppearanceSpan mDetailSpan;
     private boolean hasRecalculated;
+    protected Point textPosition = null;
 
     public TextDrawer(Resources resources, ShowcaseAreaCalculator calculator, Context context) {
         padding = resources.getDimension(R.dimen.text_padding);
@@ -61,9 +63,19 @@ class TextDrawer {
         textPaint.setAntiAlias(true);
     }
 
+    public void  setTextPosition(int x, int y) {
+        textPosition = new Point(x,y);
+    }
+
     public void draw(Canvas canvas) {
         if (shouldDrawText()) {
             float[] textPosition = getBestTextPosition();
+            float textPosition0 = textPosition[0];
+            float textPosition1 = textPosition[1];
+            if(this.textPosition!=null){
+                textPosition0 = this.textPosition.x;
+                textPosition1 = this.textPosition.y;
+            }
 
             if (!TextUtils.isEmpty(mTitle)) {
                 canvas.save();
@@ -73,7 +85,7 @@ class TextDrawer {
                             1.0f, 1.0f, true);
                 }
                 if (mDynamicTitleLayout != null) {
-                    canvas.translate(textPosition[0], textPosition[1]);
+                    canvas.translate(textPosition0, textPosition1);
                     mDynamicTitleLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -90,7 +102,7 @@ class TextDrawer {
                 float offsetForTitle = mDynamicTitleLayout != null ? mDynamicTitleLayout.getHeight() :
                         0;
                 if (mDynamicDetailLayout != null) {
-                    canvas.translate(textPosition[0], textPosition[1] + offsetForTitle);
+                    canvas.translate(textPosition0, textPosition1 + offsetForTitle);
                     mDynamicDetailLayout.draw(canvas);
                     canvas.restore();
                 }

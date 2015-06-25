@@ -74,6 +74,7 @@ public class SampleActivity extends Activity implements View.OnClickListener,
                 .setContentTitle(R.string.showcase_main_title)
                 .setContentText(R.string.showcase_main_message)
                 .setStyle(R.style.CustomShowcaseTheme2)
+                //.setDrawable(getResources().getDrawable(R.drawable.kitten))
                 .setShowcaseEventListener(this)
                 .build();
         sv.setButtonPosition(lps);
@@ -94,6 +95,7 @@ public class SampleActivity extends Activity implements View.OnClickListener,
             case R.id.buttonBlocked:
                 if (sv.isShown()) {
                     sv.setStyle(R.style.CustomShowcaseTheme);
+                    //sv.setDrawable(getResources().getDrawable(R.drawable.kitten));
                 } else {
                     sv.show();
                 }

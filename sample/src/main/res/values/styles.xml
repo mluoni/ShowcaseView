@@ -25,6 +25,7 @@
         <item name="sv_buttonText">Hide</item>
         <item name="sv_tintButtonColor">false</item>
         <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_showcasePicture">@drawable/url</item>
     </style>
 
     <style name="CustomShowcaseTheme2" parent="ShowcaseView.Light">
@@ -32,6 +33,7 @@
         <item name="sv_showcaseColor">#25467A</item>
         <item name="sv_buttonText">Close</item>
         <item name="sv_titleTextAppearance">@style/CustomTitle2</item>
+        <item name="sv_showcasePicture">@drawable/url</item>
     </style>
 
     <style name="CustomShowcaseTheme3" parent="ShowcaseView">

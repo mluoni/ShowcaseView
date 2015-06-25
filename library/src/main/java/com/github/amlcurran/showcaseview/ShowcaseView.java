@@ -24,6 +24,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -141,7 +143,8 @@ public class ShowcaseView extends RelativeLayout
         setShowcasePosition(point.x, point.y);
     }
 
-    void setShowcasePosition(int x, int y) {
+
+    public void setShowcasePosition(int x, int y) {
         if (shotStateStore.hasShot()) {
             return;
         }
@@ -149,6 +152,13 @@ public class ShowcaseView extends RelativeLayout
         showcaseY = y;
         //init();
         invalidate();
+    }
+
+
+    @Override
+    public void setTextPosition(int x, int y) {
+        this.textDrawer.setTextPosition(x, y);
+        invalidate(); //????
     }
 
     public void setTarget(final Target target) {
@@ -196,7 +206,7 @@ public class ShowcaseView extends RelativeLayout
     }
 
     public boolean hasShowcaseView() {
-        return (showcaseX != 1000000 && showcaseY != 1000000) && !hasNoTarget;
+        return (showcaseX != 1000000 && showcaseY != 1000000);// && !hasNoTarget;
     }
 
     public void setShowcaseX(int x) {
@@ -249,6 +259,7 @@ public class ShowcaseView extends RelativeLayout
     }
 
     private void recalculateText() {
+
         boolean recalculatedCling = showcaseAreaCalculator.calculateShowcaseRect(showcaseX, showcaseY, showcaseDrawer);
         boolean recalculateText = recalculatedCling || hasAlteredText;
         if (recalculateText) {
@@ -274,11 +285,20 @@ public class ShowcaseView extends RelativeLayout
             showcaseDrawer.drawToCanvas(canvas, bitmapBuffer);
         }
 
+        showcaseDrawer.drawImage(bitmapBuffer);
+
         // Draw the text on the screen, recalculating its position if necessary
         textDrawer.draw(canvas);
 
         super.dispatchDraw(canvas);
 
+    }
+
+    public Rect getRectMidle(){
+
+        Rect r = new Rect();
+        r.set(0,0,this.getRight(),this.getBottom());
+        return r;
     }
 
     @Override
@@ -407,6 +427,12 @@ public class ShowcaseView extends RelativeLayout
             return showcaseView;
         }
 
+
+        public Builder setTextPosition(int x, int y){
+            showcaseView.setTextPosition(x,y);
+            return this;
+        }
+
         /**
          * Set the title text shown on the ShowcaseView.
          */
@@ -445,6 +471,14 @@ public class ShowcaseView extends RelativeLayout
          */
         public Builder setTarget(Target target) {
             showcaseView.setTarget(target);
+            return this;
+        }
+
+        /**
+         * Set the style of the ShowcaseView. See the sample app for example styles.
+         */
+        public Builder setImage(Drawable image, Rect rect){
+            showcaseView.setImage(image, rect);
             return this;
         }
 
@@ -571,9 +605,17 @@ public class ShowcaseView extends RelativeLayout
         return isShowing;
     }
 
-    private void updateStyle(TypedArray styled, boolean invalidate) {
+    @Override
+    public void setImage(Drawable showcaseDrawable, Rect rect) {
+        showcaseDrawer.setImage(showcaseDrawable, rect);
+
+    }
+
+        private void updateStyle(TypedArray styled, boolean invalidate) {
+
         int backgroundColor = styled.getColor(R.styleable.ShowcaseView_sv_backgroundColor, Color.argb(128, 80, 80, 80));
         int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, HOLO_BLUE);
+
         String buttonText = styled.getString(R.styleable.ShowcaseView_sv_buttonText);
         if (TextUtils.isEmpty(buttonText)) {
             buttonText = getResources().getString(android.R.string.ok);

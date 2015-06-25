@@ -17,7 +17,11 @@
 package com.github.amlcurran.showcaseview.sample;
 
 import android.app.Activity;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Display;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
@@ -30,12 +34,38 @@ public class SingleShotActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_shot);
 
+
         Target viewTarget = new ViewTarget(R.id.button, this);
-        new ShowcaseView.Builder(this, true)
-                .setTarget(viewTarget)
+        Drawable d =  getResources().getDrawable(R.drawable.kitten);
+        Rect r = getRect(d);
+        ShowcaseView showcaseView = new ShowcaseView.Builder(this, false) //el true o false define si se muestra o no el dra
+             //  .setTarget(viewTarget)
+              //  .setStyle(R.style.CustomShowcaseTheme2)
                 .setContentTitle(R.string.title_single_shot)
+                .setTextPosition(20, r.bottom+5) //para poner el txt
                 .setContentText(R.string.R_string_desc_single_shot)
-                .singleShot(42)
+
+                .setImage(d, r)
+
+              //  .singleShot(44)
                 .build();
+       // showcaseView.setShowcase(viewTarget, true);
+    }
+
+    protected Rect getRect(Drawable d){
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        Rect r =new Rect();
+        int right  = (int) (width - width*0.3);
+        int bottom =  (int) (height - height*0.3);
+        int left =  (int) (width*0.3);
+        int  top =  (int) (height*0.3);
+        r.set(left, top, right, bottom);
+        return r;
     }
 }

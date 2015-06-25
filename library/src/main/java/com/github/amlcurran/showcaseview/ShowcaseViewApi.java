@@ -16,6 +16,8 @@
 
 package com.github.amlcurran.showcaseview;
 
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
 
 /**
@@ -38,6 +40,10 @@ public interface ShowcaseViewApi {
     void setBlocksTouches(boolean blockTouches);
 
     void setStyle(int theme);
+
+    void setImage(Drawable showcaseDrawable, Rect rect);
+
+    void setTextPosition(int x, int y);
 
     boolean isShowing();
 }
